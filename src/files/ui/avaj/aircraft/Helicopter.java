@@ -1,0 +1,34 @@
+package files.ui.avaj.aircraft;
+
+import files.ui.avaj.coordinates.Coordinates;
+
+public class Helicopter extends Aircraft {
+    
+    public Helicopter(String name, Coordinates coordinates) {
+        super(name, coordinates);
+    }
+
+    @Override
+    public void updateConditions() {
+        String weather = weatherTower.getWeather(coordinates);
+        
+        switch (weather) {
+            case "SUN":
+                System.out.println("Helicopter#" + name + "(" + id + "): This is hot.");
+                updateCoordinates(10, 0, 2);
+                break;
+            case "RAIN":
+                System.out.println("Helicopter#" + name + "(" + id + "): Flying in the rain is dangerous.");
+                updateCoordinates(5, 0, 0);
+                break;
+            case "FOG":
+                System.out.println("Helicopter#" + name + "(" + id + "): Navigation is difficult in fog.");
+                updateCoordinates(1, 0, 0);
+                break;
+            case "SNOW":
+                System.out.println("Helicopter#" + name + "(" + id + "): My rotor is going to freeze!");
+                updateCoordinates(0, 0, -12);
+                break;
+        }
+    }
+}

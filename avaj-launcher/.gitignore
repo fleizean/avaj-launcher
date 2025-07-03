@@ -1,0 +1,8 @@
+*.class
+*.jar
+sources.txt
+output/simulation.txt
+.DS_Store
+.idea/
+.vscode/
+*.iml
