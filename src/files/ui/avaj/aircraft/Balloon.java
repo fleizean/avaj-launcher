@@ -13,22 +13,22 @@ public class Balloon extends Aircraft {
         String weather = weatherTower.getWeather(coordinates);
         
         switch (weather) {
-            case "SUN":
+            case "SUN" -> {
                 System.out.println("Balloon#" + name + "(" + id + "): Let's enjoy the good weather and take some pics.");
                 updateCoordinates(2, 0, 4);
-                break;
-            case "RAIN":
+            }
+            case "RAIN" -> {
                 System.out.println("Balloon#" + name + "(" + id + "): Damn you rain! You messed up my balloon.");
                 updateCoordinates(0, 0, -5);
-                break;
-            case "FOG":
+            }
+            case "FOG" -> {
                 System.out.println("Balloon#" + name + "(" + id + "): Visibility is poor in this fog.");
                 updateCoordinates(0, 0, -3);
-                break;
-            case "SNOW":
+            }
+            case "SNOW" -> {
                 System.out.println("Balloon#" + name + "(" + id + "): It's snowing. We're gonna crash.");
                 updateCoordinates(0, 0, -15);
-                break;
+            }
         }
     }
 }

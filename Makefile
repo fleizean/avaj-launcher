@@ -4,10 +4,10 @@ JAVA = java
 
 # Directories
 SRC_DIR = src
-PACKAGE_DIR = ro/academyplus/avaj
+PACKAGE_DIR = files/ui/avaj
 
 # Main class
-MAIN_CLASS = ro.academyplus.avaj.simulator.Simulator
+MAIN_CLASS = files.ui.avaj.simulator.Simulator
 
 # Default target
 all: compile
@@ -19,13 +19,13 @@ compile:
 
 # Run with example scenario
 run: compile
-	$(JAVA) $(MAIN_CLASS) scenarios/scenario.txt
+	$(JAVA) -cp $(SRC_DIR) $(MAIN_CLASS) scenarios/scenario.txt
 
 # Clean compiled files
 clean:
 	find $(SRC_DIR) -name "*.class" -delete
 	rm -f sources.txt
-	rm -f output/simulation.txt
+	rm -f simulation.txt
 
 # Help
 help:

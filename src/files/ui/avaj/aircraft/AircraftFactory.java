@@ -7,6 +7,7 @@ public class AircraftFactory {
     public static Flyable newAircraft(String type, String name, Coordinates coordinates) {
         switch (type.toLowerCase()) {
             case "balloon":
+            case "baloon":
                 return new Balloon(name, coordinates);
             case "jetplane":
                 return new JetPlane(name, coordinates);
