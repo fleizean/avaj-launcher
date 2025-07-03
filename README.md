@@ -1,203 +1,182 @@
-# Avaj Launcher - Java Aircraft Simulation
+# Avaj Launcher
 
-## 📋 Proje Hakkında
+A Java-based aircraft simulation system implementing core Object-Oriented Design Patterns for weather-based flight simulation.
 
-Bu proje, 42 School'un Java öğrenme serilerinin ilk projesidir. Bir havalimanının weather tower sistemi simülasyonunu yapar ve çeşitli design pattern'leri kullanarak Object-Oriented Programming prensiplerini öğretir.
+## Overview
 
-## 🎯 Hedefler
+Avaj Launcher is a minimal aircraft simulation program that demonstrates the implementation of essential design patterns in Java. The project simulates aircraft behavior in response to weather changes, showcasing Observer, Singleton, and Factory patterns in a practical aviation context.
 
-- **UML Class Diagram** okuma ve implement etme
-- **Design Patterns** kullanma (Observer, Singleton, Factory)
-- **Java OOP** kavramlarını pratikte uygulama
-- Clean code yazma ve maintainable architecture kurma
+## Purpose
 
-## 🏗️ Design Patterns Açıklamaları
+This project serves as an introduction to:
+- **UML Class Diagram** interpretation and implementation
+- **Design Patterns** (Observer, Singleton, Factory)
+- **Java OOP** principles in practice
+- Clean code architecture and maintainable design
 
-### 1. Observer Pattern
-**Ne işe yarar?** Bir nesne durumu değiştiğinde, ona bağlı diğer nesneleri otomatik olarak bilgilendirir.
+## Architecture
 
-**Projede kullanımı:**
-- `WeatherTower` = **Subject** (Gözlenen)
-- `Aircraft`'lar = **Observer** (Gözleyici)
-- Weather değiştiğinde, tüm aircraft'lar bilgilendirilir
+### Design Patterns Implemented
 
-```
-WeatherTower
-├── register(aircraft)
-├── unregister(aircraft)  
-└── notifyObservers() → Tüm aircraft'lara haber ver
+#### 1. Observer Pattern
+- **WeatherTower** acts as the Subject
+- **Aircraft** instances are Observers
+- Weather changes automatically notify all registered aircraft
 
-Aircraft implements Flyable
-└── updateConditions() → Weather değiştiğinde çağrılır
-```
+#### 2. Singleton Pattern
+- **WeatherProvider** ensures single instance across the system
+- **AircraftFactory** provides centralized aircraft creation
 
-### 2. Singleton Pattern
-**Ne işe yarar?** Bir sınıftan sadece tek instance oluşturulmasını garanti eder.
+#### 3. Factory Pattern
+- **AircraftFactory** abstracts aircraft creation logic
+- Supports runtime determination of aircraft types
 
-**Projede kullanımı:**
-- `WeatherProvider` sınıfı Singleton olacak
-- Tüm sistem aynı weather provider'ı kullanmalı
-
-```java
-public class WeatherProvider {
-    private static WeatherProvider instance;
-    
-    private WeatherProvider() {} // Private constructor
-    
-    public static WeatherProvider getInstance() {
-        if (instance == null) {
-            instance = new WeatherProvider();
-        }
-        return instance;
-    }
-}
-```
-
-### 3. Factory Pattern
-**Ne işe yarar?** Nesne yaratma işlemini soyutlar, hangi concrete class'ın yaratılacağını runtime'da belirler.
-
-**Projede kullanımı:**
-- `AircraftFactory` class'ı
-- Type string'ine göre doğru aircraft tipini yaratır
-
-```java
-public class AircraftFactory {
-    public static Flyable newAircraft(String type, String name, Coordinates coordinates) {
-        switch(type.toLowerCase()) {
-            case "balloon": return new Baloon(name, coordinates);
-            case "jetplane": return new JetPlane(name, coordinates);
-            case "helicopter": return new Helicopter(name, coordinates);
-            default: throw new InvalidAircraftException();
-        }
-    }
-}
-```
-
-## 🗂️ UML Diyagram Analizi
-
-### Ana Bileşenler:
-
-1. **Flyable Interface**
-   - `updateConditions()` - Weather değiştiğinde çağrılır
-   - `registerTower(WeatherTower)` - Tower'a kayıt ol
-
-2. **Aircraft (Abstract Class)**
-   - `id`, `name`, `coordinates` - Ortak özellikler
-   - Concrete class'lar: `JetPlane`, `Helicopter`, `Baloon`
-
-3. **WeatherTower**
-   - Observer pattern'in Subject'i
-   - Aircraft'ları register/unregister eder
-   - Weather değişimlerini broadcast eder
-
-4. **WeatherProvider (Singleton)**
-   - `getCurrentWeather(Coordinates)` - Koordinata göre weather döner
-   - 4 weather type: SUN, RAIN, FOG, SNOW
-
-5. **Coordinates**
-   - `longitude`, `latitude`, `height`
-   - 3D pozisyon bilgisi
-
-## 🚁 Aircraft Davranışları
-
-### JetPlane:
-- **SUN**: Latitude +10, Height +2
-- **RAIN**: Latitude +5
-- **FOG**: Latitude +1  
-- **SNOW**: Height -7
-
-### Helicopter:
-- **SUN**: Longitude +10, Height +2
-- **RAIN**: Longitude +5
-- **FOG**: Longitude +1
-- **SNOW**: Height -12
-
-### Baloon:
-- **SUN**: Longitude +2, Height +4
-- **RAIN**: Height -5
-- **FOG**: Height -3
-- **SNOW**: Height -15
-
-## 📁 Önerilen Package Yapısı
+### Class Structure
 
 ```
-src/
-└── ro/academyplus/avaj/
-    ├── simulator/
-    │   ├── Simulator.java (main class)
-    │   └── exceptions/
-    │       └── InvalidAircraftException.java
-    ├── aircraft/
-    │   ├── Flyable.java
-    │   ├── Aircraft.java
-    │   ├── JetPlane.java
-    │   ├── Helicopter.java
-    │   ├── Baloon.java
-    │   └── AircraftFactory.java
-    ├── weather/
-    │   ├── WeatherProvider.java
-    │   └── WeatherTower.java
-    └── coordinates/
-        └── Coordinates.java
+src/files/ui/avaj/
+├── aircraft/
+│   ├── Aircraft.java          # Abstract base class
+│   ├── AircraftFactory.java   # Factory pattern implementation
+│   ├── Baloon.java           # Balloon aircraft implementation
+│   ├── Flyable.java          # Observer interface
+│   ├── Helicopter.java       # Helicopter aircraft implementation
+│   └── JetPlane.java         # Jet plane aircraft implementation
+├── coordinates/
+│   └── Coordinates.java      # 3D position system
+├── exceptions/
+│   ├── InvalidAircraftException.java
+│   ├── InvalidCoordinatesException.java
+│   ├── InvalidScenarioException.java
+│   ├── SimulationException.java
+│   └── WeatherException.java
+├── simulator/
+│   └── Simulator.java        # Main simulation controller
+└── weather/
+    ├── Tower.java            # Abstract observer pattern base
+    ├── WeatherProvider.java  # Singleton weather generator
+    └── WeatherTower.java     # Concrete observer implementation
 ```
 
-## 🔄 Program Akışı
+## Features
 
-1. **Başlangıç**: Scenario dosyası okunur
-2. **Parsing**: Aircraft'lar yaratılır (Factory pattern)
-3. **Registration**: Aircraft'lar tower'a kayıt olur (Observer pattern)
-4. **Simulation**: Her döngüde:
-   - Weather değişir
-   - Tower tüm aircraft'lara bildirir
-   - Her aircraft pozisyonunu günceller
-   - Mesajlar loglanır
-   - Height 0 olanlar landing yapar
+### Weather System
+- **4 Weather Types**: SUN, RAIN, FOG, SNOW
+- **3D Coordinate-based**: Each position has unique weather
+- **Dynamic Generation**: Weather changes affect aircraft behavior
 
-## 📝 Scenario Dosyası Format
+### Aircraft Types
+Each aircraft responds differently to weather conditions:
 
+**JetPlane**
+- SUN: Latitude +10, Height +2
+- RAIN: Latitude +5
+- FOG: Latitude +1
+- SNOW: Height -7
+
+**Helicopter**
+- SUN: Longitude +10, Height +2
+- RAIN: Longitude +5
+- FOG: Longitude +1
+- SNOW: Height -12
+
+**Balloon**
+- SUN: Longitude +2, Height +4
+- RAIN: Height -5
+- FOG: Height -3
+- SNOW: Height -15
+
+### Simulation Rules
+- **Coordinate Constraints**: All coordinates must be positive
+- **Height Limits**: 0-100 range (capped at boundaries)
+- **Unique IDs**: Each aircraft receives a unique identifier
+- **Landing Logic**: Aircraft at height 0 land and unregister
+- **Registration Logging**: All tower interactions are logged
+
+## Installation & Usage
+
+### Prerequisites
+- Java 8 or higher
+- `javac` and `java` commands available in PATH
+
+### Compilation
+```bash
+# Using provided Makefile
+make compile
+
+# Or manually
+find src -name "*.java" > sources.txt
+javac -d output @sources.txt
 ```
-25                          ← Simulation sayısı
-Baloon B1 2 3 20          ← TYPE NAME LONGITUDE LATITUDE HEIGHT
+
+### Execution
+```bash
+# Using Makefile
+make run
+
+# Or manually
+java -cp output files.ui.avaj.simulator.Simulator scenarios/scenario.txt
+```
+
+### Scenario File Format
+```
+25                          # Number of simulation cycles
+Baloon B1 2 3 20           # TYPE NAME LONGITUDE LATITUDE HEIGHT
 JetPlane J1 23 44 32
 Helicopter H1 654 33 20
 ```
 
-## 🎯 Implementation Sırası
+## Testing
 
-1. ✅ **Coordinates** - En basit sınıf
-2. ✅ **WeatherProvider** - Singleton pattern
-3. ✅ **Flyable interface** - Aircraft contract
-4. ✅ **Aircraft abstract class** - Ortak özellikler
-5. ✅ **Concrete aircrafts** - JetPlane, Helicopter, Baloon
-6. ✅ **AircraftFactory** - Factory pattern
-7. ✅ **WeatherTower** - Observer pattern (en karmaşık)
-8. ✅ **Simulator** - Main class, everything together
+The project includes comprehensive test scenarios:
 
-## 🧪 Test Stratejisi
+```bash
+# Run all tests
+make test-all-bonus
 
-- Basit scenario ile başla
-- Edge case'leri test et:
-  - Height 0'a düşen aircraft
-  - Invalid input files
-  - Boundary conditions (height 100+)
+# Specific test categories
+make test-invalid-simulation-count
+make test-negative-coordinates
+make test-height-capping
+```
 
-## 💡 İpuçları
+### Test Coverage
+- Invalid simulation counts
+- Malformed aircraft data
+- Boundary conditions
+- Edge cases and error handling
 
-- **UML'yi takip et** - Access modifier'ları değiştirme
-- **Clean code yaz** - Readable ve maintainable olsun  
-- **Design pattern'leri doğru uygula** - Bu projenin ana amacı
-- **Error handling** ekle - Robust bir sistem yap
-- **Funny messages** kullan - Aircraft mesajlarında yaratıcı ol
+## Output
 
-## 📚 Öğrenilecek Kavramlar
+The simulation generates detailed logs including:
+- Aircraft registration/unregistration
+- Weather-based behavior messages
+- Landing notifications
+- Error handling for invalid inputs
 
-- **Interfaces vs Abstract Classes**
-- **Composition vs Inheritance** 
-- **Dependency Injection**
-- **Separation of Concerns**
-- **SOLID Principles**
-- **Java Package Management**
+### Example Output
+```
+Tower says: Balloon#B1(1) registered to weather tower.
+Tower says: JetPlane#J1(2) registered to weather tower.
+Balloon#B1(1): Let's enjoy the good weather and take some pics.
+JetPlane#J1(2): It's raining. Better watch out for lightings.
+Balloon#B1(1): Damn you rain! You messed up my balloon.
+Balloon#B1(1) landing.
+Tower says: Balloon#B1(1) unregistered from weather tower.
+```
 
----
+## Error Handling
 
-**Not**: Bu proje sadece kod yazmak değil, **software design** öğrenme projesidir. Pattern'leri ve OOP prensiplerini anlamaya odaklan!
+Robust exception handling includes:
+- **InvalidScenarioException**: Malformed scenario files
+- **InvalidAircraftException**: Unknown aircraft types
+- **InvalidCoordinatesException**: Invalid coordinate values
+- **SimulationException**: Runtime simulation errors
+
+## Technical Specifications
+
+- **Language**: Java 8+ (LTS compatible)
+- **Build System**: Makefile with comprehensive targets
+- **Package Structure**: Proper Java package conventions
+- **Design Patterns**: Observer, Singleton, Factory
+- **Testing**: Extensive edge case coverage
