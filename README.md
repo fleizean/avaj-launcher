@@ -64,7 +64,7 @@ public class WeatherProvider {
 public class AircraftFactory {
     public static Flyable newAircraft(String type, String name, Coordinates coordinates) {
         switch(type.toLowerCase()) {
-            case "balloon": return new Balloon(name, coordinates);
+            case "balloon": return new Baloon(name, coordinates);
             case "jetplane": return new JetPlane(name, coordinates);
             case "helicopter": return new Helicopter(name, coordinates);
             default: throw new InvalidAircraftException();
@@ -83,7 +83,7 @@ public class AircraftFactory {
 
 2. **Aircraft (Abstract Class)**
    - `id`, `name`, `coordinates` - Ortak özellikler
-   - Concrete class'lar: `JetPlane`, `Helicopter`, `Balloon`
+   - Concrete class'lar: `JetPlane`, `Helicopter`, `Baloon`
 
 3. **WeatherTower**
    - Observer pattern'in Subject'i
@@ -112,7 +112,7 @@ public class AircraftFactory {
 - **FOG**: Longitude +1
 - **SNOW**: Height -12
 
-### Balloon:
+### Baloon:
 - **SUN**: Longitude +2, Height +4
 - **RAIN**: Height -5
 - **FOG**: Height -3
@@ -132,7 +132,7 @@ src/
     │   ├── Aircraft.java
     │   ├── JetPlane.java
     │   ├── Helicopter.java
-    │   ├── Balloon.java
+    │   ├── Baloon.java
     │   └── AircraftFactory.java
     ├── weather/
     │   ├── WeatherProvider.java
@@ -157,7 +157,7 @@ src/
 
 ```
 25                          ← Simulation sayısı
-Balloon B1 2 3 20          ← TYPE NAME LONGITUDE LATITUDE HEIGHT
+Baloon B1 2 3 20          ← TYPE NAME LONGITUDE LATITUDE HEIGHT
 JetPlane J1 23 44 32
 Helicopter H1 654 33 20
 ```
@@ -168,7 +168,7 @@ Helicopter H1 654 33 20
 2. ✅ **WeatherProvider** - Singleton pattern
 3. ✅ **Flyable interface** - Aircraft contract
 4. ✅ **Aircraft abstract class** - Ortak özellikler
-5. ✅ **Concrete aircrafts** - JetPlane, Helicopter, Balloon
+5. ✅ **Concrete aircrafts** - JetPlane, Helicopter, Baloon
 6. ✅ **AircraftFactory** - Factory pattern
 7. ✅ **WeatherTower** - Observer pattern (en karmaşık)
 8. ✅ **Simulator** - Main class, everything together

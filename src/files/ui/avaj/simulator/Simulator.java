@@ -39,7 +39,7 @@ public class Simulator {
                 }
                 
                 Coordinates coords = new Coordinates(longitude, latitude, height);
-                Flyable aircraft = AircraftFactory.newAircraft(type, name, coords);
+                Flyable aircraft = AircraftFactory.getInstance().newAircraft(type, name, coords);
                 aircrafts.add(aircraft);
                 aircraft.registerTower(tower);
                 tower.register(aircraft);

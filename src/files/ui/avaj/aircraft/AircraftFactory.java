@@ -3,18 +3,34 @@ package files.ui.avaj.aircraft;
 import files.ui.avaj.coordinates.Coordinates;
 
 public class AircraftFactory {
+    private static AircraftFactory instance;
     
-    public static Flyable newAircraft(String type, String name, Coordinates coordinates) {
-        switch (type.toLowerCase()) {
-            case "balloon":
-            case "baloon":
-                return new Balloon(name, coordinates);
-            case "jetplane":
+    private AircraftFactory() {}
+    
+    public static AircraftFactory getInstance() {
+        if (instance == null) {
+            instance = new AircraftFactory();
+        }
+        return instance;
+    }
+    
+    public Flyable newAircraft(String type, String name, Coordinates coordinates) {
+        String normalizedType = type.toLowerCase();
+        
+        switch (normalizedType) {
+            case "baloon" -> {
+                return new Baloon(name, coordinates);
+            }
+            case "jetplane" ->
+            {
                 return new JetPlane(name, coordinates);
-            case "helicopter":
+            }
+            case "helicopter" -> {
                 return new Helicopter(name, coordinates);
-            default:
+            }
+            default -> {
                 throw new IllegalArgumentException("Unknown aircraft type: " + type);
+            }
         }
     }
 }
