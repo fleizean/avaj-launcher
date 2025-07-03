@@ -5,6 +5,7 @@ import files.ui.avaj.aircraft.Flyable;
 import files.ui.avaj.coordinates.Coordinates;
 
 public class WeatherTower extends Tower {
+    // • Each time an aircraft registers or unregisters to/from the weather tower, a message will be logged.
 
     @Override
     public void register(Flyable flyable) {
