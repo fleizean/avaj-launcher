@@ -19,8 +19,7 @@ $(OUTPUT_DIR):
 
 # Compile
 compile: $(OUTPUT_DIR)
-	find $(SRC_DIR) -name "*.java" > sources.txt
-	$(JAVAC) -d $(OUTPUT_DIR) @sources.txt
+	find $(SRC_DIR) -name "*.java" | xargs $(JAVAC) -d $(OUTPUT_DIR)
 
 # Run with example scenario
 run: compile
@@ -29,7 +28,11 @@ run: compile
 # Clean compiled files
 clean:
 	rm -rf $(OUTPUT_DIR)
-	rm -f sources.txt
+	rm -f simulation.txt
+	rm -rf scenarios
+
+fclean:
+	rm -rf $(OUTPUT_DIR)
 	rm -f simulation.txt
 	rm -rf scenarios
 
@@ -143,71 +146,80 @@ create-bonus-scenarios: $(SCENARIO_DIR)
 
 test-scenario: compile
 	@echo "=== Running Example Scenario ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/scenario.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/scenario.txt 2>&1
 
 test-invalid-simulation-count: compile
 	@echo "=== Testing Invalid Simulation Count ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_simulation_count.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_simulation_count.txt 2>&1 || true
 
 test-negative-simulation-count: compile
 	@echo "=== Testing Negative Simulation Count ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_simulation_count.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_simulation_count.txt 2>&1 || true
 
 test-zero-simulation-count: compile
 	@echo "=== Testing Zero Simulation Count ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_zero_simulation_count.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_zero_simulation_count.txt 2>&1 || true
 
 test-large-simulation-count: compile
 	@echo "=== Testing Large Simulation Count ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_large_simulation_count.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_large_simulation_count.txt 2>&1 || true
 
 test-invalid-aircraft-type: compile
 	@echo "=== Testing Invalid Aircraft Type ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_aircraft_type.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_aircraft_type.txt 2>&1 || true
 
 test-invalid-aircraft-format: compile
 	@echo "=== Testing Invalid Aircraft Format ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_aircraft_format.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_aircraft_format.txt 2>&1 || true
 
 test-empty-aircraft-name: compile
 	@echo "=== Testing Empty Aircraft Name ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_empty_aircraft_name.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_empty_aircraft_name.txt 2>&1 || true
 
 test-invalid-coordinates: compile
 	@echo "=== Testing Invalid Coordinates ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_coordinates.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_invalid_coordinates.txt 2>&1 || true
 
 test-negative-coordinates: compile
 	@echo "=== Testing Negative Coordinates ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_coordinates.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_coordinates.txt 2>&1 || true
 
 test-negative-height: compile
 	@echo "=== Testing Negative Height ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_height.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_negative_height.txt 2>&1 || true
 
 test-empty-scenario: compile
 	@echo "=== Testing Empty Scenario ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_empty_scenario.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_empty_scenario.txt 2>&1 || true
 
 test-no-aircrafts: compile
 	@echo "=== Testing No Aircrafts ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_no_aircrafts.txt 2>&1
-
-test-mixed-errors: compile
-	@echo "=== Testing Mixed Errors ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_mixed_errors.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_no_aircrafts.txt 2>&1 || true
 
 test-height-capping: compile
 	@echo "=== Testing Height Capping ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_height_capping.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_height_capping.txt 2>&1 || true
 
-test-nonexistent-file: compile
-	@echo "=== Testing Nonexistent File ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/nonexistent_file.txt 2>&1
+test-null-aircraft-type: compile
+	@echo "=== Testing Null Aircraft Type ==="
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_null_aircraft_type.txt 2>&1 || true
+
+test-malformed-lines: compile
+	@echo "=== Testing Malformed Lines ==="
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_malformed_lines.txt 2>&1 || true
+
+test-edge-values: compile
+	@echo "=== Testing Edge Values ==="
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_edge_values.txt 2>&1 || true
+
+test-whitespace-handling: compile
+	@echo "=== Testing Whitespace Handling ==="
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_whitespace_handling.txt 2>&1 || true
+
 
 test-case-sensitivity: compile
 	@echo "=== Testing Case Sensitivity ==="
-	-$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_case_sensitivity.txt 2>&1
+	@$(JAVA) -cp $(OUTPUT_DIR) $(MAIN_CLASS) scenarios/test_case_sensitivity.txt 2>&1 || true
 
 test-all-bonus: create-bonus-scenarios compile
 	@echo "==============================================="
@@ -229,6 +241,8 @@ test-all-bonus: create-bonus-scenarios compile
 	@echo "-----------------------------------------------"
 	$(MAKE) test-empty-aircraft-name
 	@echo "-----------------------------------------------"
+	$(MAKE) test-null-aircraft-type
+	@echo "-----------------------------------------------"
 	$(MAKE) test-invalid-coordinates
 	@echo "-----------------------------------------------"
 	$(MAKE) test-negative-coordinates
@@ -239,17 +253,17 @@ test-all-bonus: create-bonus-scenarios compile
 	@echo "-----------------------------------------------"
 	$(MAKE) test-no-aircrafts
 	@echo "-----------------------------------------------"
-	$(MAKE) test-mixed-errors
+	$(MAKE) test-malformed-lines
 	@echo "-----------------------------------------------"
 	$(MAKE) test-height-capping
 	@echo "-----------------------------------------------"
-	$(MAKE) test-nonexistent-file
+	$(MAKE) test-edge-values
+	@echo "-----------------------------------------------"
+	$(MAKE) test-whitespace-handling
 	@echo "-----------------------------------------------"
 	$(MAKE) test-case-sensitivity
 	@echo "==============================================="
 	@echo "           BONUS TESTS COMPLETED             "
 	@echo "==============================================="
 
-
-
-.PHONY: all compile run clean help create-bonus-scenarios test-all-bonus test-invalid-simulation-count test-negative-simulation-count test-zero-simulation-count test-large-simulation-count test-invalid-aircraft-type test-invalid-aircraft-format test-empty-aircraft-name test-invalid-coordinates test-negative-coordinates test-negative-height test-empty-scenario test-no-aircrafts test-mixed-errors test-height-capping test-nonexistent-file test-case-sensitivity
+.PHONY: all compile run clean help create-bonus-scenarios test-all-bonus test-invalid-simulation-count test-negative-simulation-count test-zero-simulation-count test-large-simulation-count test-invalid-aircraft-type test-invalid-aircraft-format test-empty-aircraft-name test-null-aircraft-type test-invalid-coordinates test-negative-coordinates test-negative-height test-empty-scenario test-no-aircrafts test-malformed-lines test-height-capping test-edge-values test-whitespace-handling test-case-sensitivity fclean
